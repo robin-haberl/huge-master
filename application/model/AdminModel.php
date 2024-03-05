@@ -92,4 +92,37 @@ class AdminModel
             return true;
         }
     }
+    public static function getRoles(){
+        $database = DatabaseFactory::getFactory()->getConnection();
+        
+        $query = $database->prepare("SELECT user_account_type_definition FROM user_account_type_text");
+        $query->execute();
+        
+        $roles = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        $html = '<select name="user_account_type" id="user_account_type">';
+        foreach ($roles as $role) {
+            $roleNa = htmlspecialchars($role['user_account_type_definition']);
+            $html .="<option value=\"$roleNa\">$roleNa</option>";
+        }
+        $html .='</select>';
+        echo($html);
+    }
+    public static function getAccountTypeFromName($name){
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $query = $database->prepare("SELECT user_account_type FROM user_account_type_text WHERE user_account_type_definition = :role_name");
+        $query->execute(array(":role_name"=> $name));
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
+        return $result[0]["user_account_type"];
+    }
+
+    public static function changeAccountType($userId, $accountType){
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $query = $database->prepare("UPDATE users SET user_account_type = :role_type WHERE userId = :account_type");
+        $query->execute(array(":role_type"=> AdminModel::getAccountTypeFromName($userId),":account_type"=> $accountType));
+    }
 }
