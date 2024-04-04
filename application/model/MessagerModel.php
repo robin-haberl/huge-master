@@ -4,7 +4,7 @@ class MessagerModel
     public static function getAllMessages($sender_id, $receiver_id) {
         $database = DatabaseFactory::getFactory()->getConnection();
         
-        $sql = "SELECT * FROM messages WHERE (Sender = :sender OR Sender = :receiver) AND (Receiver = :receiver OR Receiver = :sender)";
+        $sql = "CALL getAllMessages(:sender, :receiver)";
         $sth = $database->prepare($sql);
         $sth->execute(array(
             ':sender' => $sender_id,
@@ -12,7 +12,10 @@ class MessagerModel
         ));
             
         $all_messages = array();
-        foreach ($sth->fetchAll() as $messageUser) {
+        $data = $sth->fetchAll();
+        $sth->closeCursor();
+
+        foreach ($data as $messageUser) {
             $all_messages[$messageUser->id] = new stdClass();
             $all_messages[$messageUser->id]->id = $messageUser->id;
             $all_messages[$messageUser->id]->message = $messageUser->message;
@@ -25,7 +28,7 @@ class MessagerModel
 
     public static function setUnreadToRead($sender_id, $receiver_id) {
         $database = DatabaseFactory::getFactory()->getConnection();
-            $sql = "UPDATE messages SET seen = 1 WHERE receiver = :receiver_id AND sender = :sender_id AND seen = 0";
+            $sql = "CALL setUnreadToRead(:receiver_id, :sender_id)";
             $sth = $database->prepare($sql);
             $sth->execute(array(
                 ':receiver_id' => $receiver_id, 
@@ -49,7 +52,7 @@ class MessagerModel
     public static function getAllUnreadMessagesCount($receiver_id, $sender_id) {
         $database = DatabaseFactory::getFactory()->getConnection();
         
-        $sql = "SELECT Count(*) AS count From messages WHERE Receiver = :receiver AND Sender = :sender AND seen = FALSE;";
+        $sql = "CALL getAllUnreadMessagesCount(:receiver, :sender)";
         $sth = $database->prepare($sql);
         $sth->execute(array(
             ':receiver' => $receiver_id,
