@@ -63,7 +63,7 @@
                 </thead>
                 <tbody>
                     <?php foreach ($this->users as $user) { ?>
-                        <?php if($user->user_id != Session::get("user_id")): ?>
+                        <?php if($user->user_id != Session::get("user_id")): //der angemeldete User wird nicht angezeigt?> 
                             <tr class="<?= ($user->user_active == 0 ? 'inactive' : 'active'); ?>">
                                 <td class="avatar">
                                     <?php if (isset($user->user_avatar_link)) { ?>
