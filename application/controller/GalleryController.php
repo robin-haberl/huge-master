@@ -5,9 +5,21 @@ class GalleryController extends Controller
     {
         parent::__construct();
     }
+    public function index() {
+        $this->View->render('gallery/index', array(
+            'createUserFolder' => GalleryModel::createFolder(Session::get('user_id')),
+            'images' => GalleryModel::getAllImagesNames(),
+        ));
+    }
 
-    public function index()
+    public function upload(){
+        GalleryModel::uploadImages();
+        Redirect::to("gallery/index/");
+    }
+
+    public function getAllImages($image)
     {
-        $this->View->render('gallery/index');
+        GalleryModel::getAllImages($image);
+
     }
 }

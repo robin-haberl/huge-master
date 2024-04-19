@@ -294,4 +294,25 @@ form {
     vertical-align: center;
     border: 1px solid black;
   }
-  
+  body {
+    font-family: Arial, sans-serif; /* Moderner Schrifttyp */
+    background-color: #f0f0f0; /* Hintergrundfarbe */
+    color: #333; /* Textfarbe */
+}
+
+.container {
+    max-width: 960px; /* Containerbreite */
+    margin: 0 auto; /* Zentriert den Container */
+    padding: 20px; /* Innenabstand */
+}
+
+.gallery-image {
+    width: 150px; /* Bildbreite */
+    height: auto; /* Beibehaltung des Seitenverhältnisses */
+    margin: 10px; /* Abstand um das Bild */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Schatten um das Bild */
+}
+
+h3 {
+    color: #444; /* Überschriftfarbe */
+}
